@@ -1,0 +1,43 @@
+@page
+@model CarRental.Pages.LoginModel
+@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<div class="full-screen-center">
+    
+    <div class="card auth-card">
+        <div class="card-body p-5">
+            
+            <div class="text-center mb-4">
+                <h2 class="fw-bold" style="color: #1a202c;">Witaj ponownie! 👋</h2>
+                <p class="text-muted">Wpisz dane, aby się zalogować.</p>
+            </div>
+
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-muted small text-uppercase">Email</label>
+                    <input type="email" class="form-control" placeholder="jan@przyklad.pl" required />
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-muted small text-uppercase">Hasło</label>
+                    <input type="password" class="form-control" placeholder="••••••••" required />
+                </div>
+
+                <div class="d-grid mb-4">
+                    <button type="submit" class="btn btn-primary btn-lg fw-bold" style="border-radius: 10px; padding: 12px;">
+                        Zaloguj się
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center border-top pt-3">
+                <span class="text-muted">Nie masz konta?</span>
+                <a asp-page="/Register" class="fw-bold text-primary text-decoration-none ms-1">Zarejestruj się</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>

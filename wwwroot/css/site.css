@@ -1,37 +1,31 @@
 /* =========================================
    1. RESET I USTAWIENIA BAZOWE
    ========================================= */
+
 html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f6f9;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
     min-height: 100%;
+    width: 100%;
 }
 
-/* Stopka */
-.footer {
-    position: absolute;
-    bottom: 0;
+main {
     width: 100%;
-    white-space: nowrap;
-    line-height: 60px;
-    background-color: #fff;
-    border-top: 1px solid #e5e5e5;
-    color: #6c757d;
 }
 
 /* =========================================
-   2. NAVBAR - WYGLĄD I ODSTĘPY
+   2. NAVBAR
    ========================================= */
+
 .navbar-pro {
     background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    
-    /* TU ZMNIEJSZYŁEM PADDING: 
-       Było 12px 5% -> Jest 10px 2% */
-    padding: 10px 2% !important; 
+    padding: 10px 2%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 /* LOGO */
@@ -46,15 +40,10 @@ html, body {
     gap: 10px;
     text-decoration: none !important;
     white-space: nowrap;
-    margin-right: 20px;
 }
 
-/* =========================================
-   3. UKŁAD MENU (NAPRAWA POZYCJI)
-   ========================================= */
-
-/* Kontenery wewnątrz paska */
-.navbar-pro .container, 
+/* Kontener navbar */
+.navbar-pro .container,
 .navbar-pro .container-fluid {
     max-width: 100% !important;
     width: 100% !important;
@@ -65,29 +54,23 @@ html, body {
     justify-content: space-between;
 }
 
-/* Prawa strona (menu) */
+/* Menu */
 .navbar-collapse {
-    flex-grow: 1;
     display: flex !important;
     justify-content: flex-end !important;
 }
 
-/* Lista linków - poziomo */
 .navbar-nav {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 15px; /* Trochę mniejszy odstęp między napisami */
-    list-style: none;
+    gap: 15px;
     margin: 0;
     padding: 0;
+    list-style: none;
 }
 
-/* =========================================
-   4. LINKI I PRZYCISKI
-   ========================================= */
-
-/* Linki zwykłe */
+/* Linki */
 .navbar-pro .nav-link {
     color: rgba(255,255,255,0.85) !important;
     font-size: 1rem;
@@ -105,10 +88,9 @@ html, body {
     color: #fff !important;
     background-color: rgba(255,255,255,0.15);
     transform: translateY(-2px);
-    text-decoration: none !important;
 }
 
-/* Przycisk REZERWUJ */
+/* CTA */
 .btn-cta {
     background: linear-gradient(45deg, #ff9f43, #ffb969);
     color: #fff !important;
@@ -117,12 +99,139 @@ html, body {
     padding: 8px 25px !important;
     box-shadow: 0 4px 15px rgba(255, 159, 67, 0.4);
     border: none;
-    white-space: nowrap;
     margin-left: 10px;
 }
 
 .btn-cta:hover {
     background: linear-gradient(45deg, #ffb969, #ff9f43);
     transform: translateY(-2px) scale(1.05);
-    text-decoration: none !important;
+}
+
+/* =========================================
+   3. STOPKA
+   ========================================= */
+
+.footer {
+    width: 100%;
+    line-height: 60px;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    color: #6c757d;
+    text-align: center;
+}
+
+/* =========================================
+   4. CENTROWANIE STRON AUTH
+   ========================================= */
+
+.full-screen-center {
+    min-height: calc(100vh - 120px); /* navbar + footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f2f5;
+}
+
+/* =========================================
+   5. KARTA AUTH (LOGIN / REGISTER)
+   ========================================= */
+
+.auth-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    border: none;
+    text-align: center;
+}
+
+/* =========================================
+   6. INPUTY I FORMULARZE
+   ========================================= */
+
+.auth-card input.form-control {
+    background-color: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    padding: 12px 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.auth-card input.form-control:focus {
+    background-color: #ffffff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+    outline: none;
+}
+
+.auth-card label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #718096;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+    text-align: left;
+}
+
+/* =========================================
+   7. PRZYCISKI FORMULARZY
+   ========================================= */
+
+.auth-card .btn-primary {
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* =========================================
+   8. ALERTY WALIDACJI
+   ========================================= */
+
+.alert-danger {
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+/* =========================================
+   9. RESPONSYWNOŚĆ
+   ========================================= */
+
+@media (max-width: 576px) {
+    .auth-card {
+        padding: 10px;
+    }
+
+    .navbar-nav {
+        gap: 8px;
+    }
+}
+.auth-card .mb-3,
+.auth-card .mb-4 {
+    display: flex;
+    flex-direction: column;
+}
+.auth-card .text-danger {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+}
+.auth-card .form-control {
+    width: 100%;
+}
+.auth-card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* poziomo */
+    justify-content: center;  /* pionowo */
+}
+.auth-wrapper {
+    width: 100%;
+
+    display: flex;
+    justify-content: center; /* CENTROWANIE POZIOME */
+    align-items: center;     /* CENTROWANIE PIONOWE */
+    padding: 40px 0px;
 }

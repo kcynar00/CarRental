@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="utf-8" />
@@ -25,6 +29,10 @@
                 <ul class="navbar-nav d-flex flex-row align-items-center gap-2">                  
                     
                     <li class="nav-item">
+                        <a class="nav-link" asp-page="/Index">Start</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" asp-page="/Cars">Samochody</a>
                     </li>
 
@@ -32,20 +40,51 @@
                         <a class="nav-link" asp-page="/Privacy">Kontakt</a>
                     </li>
 
-                    <li class="nav-item ms-2">
-                        <a class="nav-link btn-cta" asp-page="/Cars">Rezerwuj</a>
-                    </li>
+                   @if (SignInManager.IsSignedIn(User))
+{
+    // --- WARIANT A: Użytkownik ZALOGOWANY ---
+    
+    // 1. Przycisk Rezerwuj (kieruje do rezerwacji/aut)
+    <li class="nav-item ms-2">
+        <a class="nav-link btn-cta" asp-page="/Cars">Rezerwuj</a>
+    </li>
+
+    // 2. Przywitanie (opcjonalnie)
+    <li class="nav-item d-flex align-items-center ms-3">
+        <span class="text-white small">Cześć, @User.Identity?.Name!</span>
+    </li>
+
+    // 3. Przycisk Wyloguj (niezbędny, żeby wyjść)
+    <li class="nav-item">
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+            <button type="submit" class="nav-link btn btn-link text-white" style="text-decoration: none;">Wyloguj</button>
+        </form>
+    </li>
+}
+else
+{
+    // --- WARIANT B: Użytkownik NIEZALOGOWANY ---
+    
+    // 1. Przycisk Rezerwuj (kieruje do LOGOWANIA)
+    <li class="nav-item ms-2">
+        <a class="nav-link btn-cta" asp-page="/Login">Rezerwuj</a>
+    </li>
+    
+    // 2. Link do logowania w menu (dla wygody)
+    <li class="nav-item">
+        <a class="nav-link" asp-page="/Login">Logowanie</a>
+    </li>
+}
 
                 </ul>
             </div>
         </div>
     </nav>
 </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    
+    <main role="main">
+        @RenderBody()
+    </main>
 
     <footer class="border-top footer text-muted">
         <div class="container">
