@@ -6,32 +6,28 @@ using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. POBRANIE CONNECTION STRINGA (Połączenie do bazy)
-// Sprawdź w appsettings.json, czy klucz to "CarRentalContext" czy "DefaultConnection"
-var connectionString = builder.Configuration.GetConnectionString("CarRentalContext") 
+
+var connectionString = builder.Configuration.GetConnectionString("CarRentalContext")
     ?? throw new InvalidOperationException("Connection string 'CarRentalContext' not found.");
 
-// 2. REJESTRACJA BAZY DANYCH
 builder.Services.AddDbContext<CarRentalContext>(options =>
     options.UseSqlite(connectionString));
 
-// 3. REJESTRACJA IDENTITY (To naprawia Twój błąd!)
-builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     {
-        // Opcjonalne: Ułatwienia logowania na czas testów
+
         options.SignIn.RequireConfirmedAccount = false;
         options.Password.RequireDigit = false;
         options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequiredLength = 3; 
+        options.Password.RequiredLength = 3;
     })
     .AddEntityFrameworkStores<CarRentalContext>();
 
-// Dodanie Razor Pages
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Konfiguracja potoku HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -39,16 +35,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles(); // Warto dodać dla pewności ładowania stylów CSS
+app.UseStaticFiles();
 
 app.UseRouting();
 
-// 4. WAŻNE: KOLEJNOŚĆ (Authentication musi być przed Authorization)
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
-// Mapowanie stron Razor
-// Seed test data (cars + test user)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
