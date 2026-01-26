@@ -15,4 +15,5 @@ public class CarRentalContext : IdentityDbContext<IdentityUser>
 
     // DbSet for test Car entity
     public DbSet<Car> Cars { get; set; } = null!;
+    public DbSet<CarReservation> CarReservations { get; set; } = null!;
 }

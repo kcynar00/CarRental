@@ -5,4 +5,42 @@
 }
 
 <h1>Nasze Samochody</h1>
-<p>Tutaj będzie lista aut do wynajęcia.</p>
+
+@if (Model.Cars == null || !Model.Cars.Any())
+{
+    <p>Brak samochodów w bazie.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Marka</th>
+                <th>Model</th>
+                <th>Rok</th>
+                <th>Cena / dzień</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model.Cars)
+            {
+                <tr>
+                    <td>@car.Id</td>
+                    <td>@car.Make</td>
+                    <td>@car.Model</td>
+                    <td>@car.Year</td>
+                    <td>@car.DailyPrice.ToString("0.00")</td>
+                    <td>
+                        @if (User?.Identity?.IsAuthenticated == true)
+                        {
+                            <a class="btn btn-primary" asp-page="/Reservations/Create" asp-route-carId="@car.Id">
+                                Rezerwuj
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,41 @@
+@page
+@model CarRental.Pages.Reservations.CreateModel
+@{
+    ViewData["Title"] = "Rezerwacja";
+}
+
+<h1>Rezerwacja samochodu</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+<form method="post" class="mt-3">
+    <div class="mb-3">
+        <label class="form-label">Samochód</label>
+        <select class="form-select" asp-for="Input.CarId" asp-items="Model.CarOptions">
+            <option value="">-- wybierz samochód --</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Input.CarId"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Data od</label>
+        <input class="form-control" asp-for="Input.DateFrom" type="date" />
+        <span class="text-danger" asp-validation-for="Input.DateFrom"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Data do</label>
+        <input class="form-control" asp-for="Input.DateTo" type="date" />
+        <span class="text-danger" asp-validation-for="Input.DateTo"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Zarezerwuj</button>
+    <a class="btn btn-secondary" asp-page="/Cars">Powrót</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

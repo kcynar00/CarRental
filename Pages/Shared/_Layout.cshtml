@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,74 +15,77 @@
     <link rel="stylesheet" href="~/CarRental.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
+
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-pro sticky-top">
-        <div class="container">
-            
-            <a class="navbar-brand" asp-area="" asp-page="/Index">
-                <i class="fa-solid fa-car"></i> 
-                <span>CAR RENTAL</span>
-            </a>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-pro sticky-top">
+            <div class="container">
 
-            <div class="collapse navbar-collapse flex-grow-1 justify-content-end" id="navbarContent">
-                
-                <ul class="navbar-nav d-flex flex-row align-items-center gap-2">                  
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" asp-page="/Index">Start</a>
-                    </li>
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    <i class="fa-solid fa-car"></i>
+                    <span>CAR RENTAL</span>
+                </a>
 
-                    <li class="nav-item">
-                        <a class="nav-link" asp-page="/Cars">Samochody</a>
-                    </li>
+                <div class="collapse navbar-collapse flex-grow-1 justify-content-end" id="navbarContent">
 
-                    <li class="nav-item">
-                        <a class="nav-link" asp-page="/Privacy">Kontakt</a>
-                    </li>
+                    <ul class="navbar-nav d-flex flex-row align-items-center gap-2">
 
-                   @if (SignInManager.IsSignedIn(User))
-{
-    // --- WARIANT A: Użytkownik ZALOGOWANY ---
-    
-    // 1. Przycisk Rezerwuj (kieruje do rezerwacji/aut)
-    <li class="nav-item ms-2">
-        <a class="nav-link btn-cta" asp-page="/Cars">Rezerwuj</a>
-    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Index">Start</a>
+                        </li>
 
-    // 2. Przywitanie (opcjonalnie)
-    <li class="nav-item d-flex align-items-center ms-3">
-        <span class="text-white small">Cześć, @User.Identity?.Name!</span>
-    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Cars">Samochody</a>
+                        </li>
 
-    // 3. Przycisk Wyloguj (niezbędny, żeby wyjść)
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
-            <button type="submit" class="nav-link btn btn-link text-white" style="text-decoration: none;">Wyloguj</button>
-        </form>
-    </li>
-}
-else
-{
-    // --- WARIANT B: Użytkownik NIEZALOGOWANY ---
-    
-    // 1. Przycisk Rezerwuj (kieruje do LOGOWANIA)
-    <li class="nav-item ms-2">
-        <a class="nav-link btn-cta" asp-page="/Login">Rezerwuj</a>
-    </li>
-    
-    // 2. Link do logowania w menu (dla wygody)
-    <li class="nav-item">
-        <a class="nav-link" asp-page="/Login">Logowanie</a>
-    </li>
-}
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Privacy">Kontakt</a>
+                        </li>
 
-                </ul>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            // --- WARIANT A: Użytkownik ZALOGOWANY ---
+
+                            // 1. Przycisk Rezerwuj (kieruje do rezerwacji/aut)
+                            <li class="nav-item ms-2">
+                                <a class="nav-link  btn-cta" asp-page="/Reservations/Create">Rezerwacja</a>
+                            </li>
+
+                            // 2. Przywitanie (opcjonalnie)
+                            <li class="nav-item d-flex align-items-center ms-3">
+                                <span class="text-white small">Cześć, @User.Identity?.Name!</span>
+                            </li>
+
+                            // 3. Przycisk Wyloguj (niezbędny, żeby wyjść)
+                            <li class="nav-item">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout"
+                                    asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+                                    <button type="submit" class="nav-link btn btn-link text-white"
+                                        style="text-decoration: none;">Wyloguj</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            // --- WARIANT B: Użytkownik NIEZALOGOWANY ---
+
+                            // 1. Przycisk Rezerwuj (kieruje do LOGOWANIA)
+                            <li class="nav-item ms-2">
+                                <a class="nav-link" asp-page="/Reservations/Create">Rezerwacja</a>
+                            </li>
+
+                            // 2. Link do logowania w menu (dla wygody)
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Logowanie</a>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-</header>
-    
+        </nav>
+    </header>
+
     <main role="main">
         @RenderBody()
     </main>
@@ -98,4 +102,5 @@ else
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

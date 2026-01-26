@@ -55,8 +55,18 @@ using (var scope = app.Services.CreateScope())
         // Seed Cars if empty
         if (!context.Cars.Any())
         {
-            context.Cars.Add(new Car { Make = "Toyota", Model = "Corolla", Year = 2020, DailyPrice = 99m });
-            context.Cars.Add(new Car { Make = "Ford", Model = "Focus", Year = 2019, DailyPrice = 79m });
+            var cars = new List<Car>
+            {
+                new Car { Make = "Toyota", Model = "Corolla", Year = 2021, DailyPrice = 149.99m },
+                new Car { Make = "Toyota", Model = "Yaris", Year = 2020, DailyPrice = 129.99m },
+                new Car { Make = "Volkswagen", Model = "Golf", Year = 2019, DailyPrice = 139.99m },
+                new Car { Make = "Skoda", Model = "Octavia", Year = 2022, DailyPrice = 169.99m },
+                new Car { Make = "Kia", Model = "Ceed", Year = 2021, DailyPrice = 149.00m },
+                new Car { Make = "Hyundai", Model = "i30", Year = 2020, DailyPrice = 139.00m },
+                new Car { Make = "BMW", Model = "3 Series", Year = 2021, DailyPrice = 299.99m },
+                new Car { Make = "Audi", Model = "A4", Year = 2022, DailyPrice = 319.99m }
+            };
+            await context.Cars.AddRangeAsync(cars);
             await context.SaveChangesAsync();
             logger.LogInformation("Seeded sample cars.");
         }
@@ -71,12 +81,31 @@ using (var scope = app.Services.CreateScope())
             var result = await userManager.CreateAsync(testUser, "Test123!");
             if (result.Succeeded)
             {
-                logger.LogInformation("Created test user {email} with password 'Test123!'", testEmail);
+                var debugNewUser = await userManager.FindByEmailAsync(testEmail);
+                logger.LogInformation("Created test user {email} with password 'Test123!'", testEmail, debugNewUser);
             }
             else
             {
                 logger.LogWarning("Failed to create test user: {errors}", string.Join(", ", result.Errors.Select(e => e.Description)));
             }
+        }
+
+        // Seed test cars
+        if (await context.Cars.AnyAsync() == false)
+        {
+            var cars = new List<Car>
+         {
+            new Car { Make = "Toyota", Model = "Corolla", Year = 2021, DailyPrice = 149.99m },
+            new Car { Make = "Toyota", Model = "Yaris", Year = 2020, DailyPrice = 129.99m },
+            new Car { Make = "Volkswagen", Model = "Golf", Year = 2019, DailyPrice = 139.99m },
+            new Car { Make = "Skoda", Model = "Octavia", Year = 2022, DailyPrice = 169.99m },
+            new Car { Make = "Kia", Model = "Ceed", Year = 2021, DailyPrice = 149.00m },
+            new Car { Make = "Hyundai", Model = "i30", Year = 2020, DailyPrice = 139.00m },
+            new Car { Make = "BMW", Model = "3 Series", Year = 2021, DailyPrice = 299.99m },
+            new Car { Make = "Audi", Model = "A4", Year = 2022, DailyPrice = 319.99m }
+         };
+            await context.Cars.AddRangeAsync(cars);
+            await context.SaveChangesAsync();
         }
     }
     catch (Exception ex)
