@@ -15,39 +15,45 @@ namespace CarRental.Pages.Reservations
     {
         private readonly CarRentalContext _context;
 
-        public CreateModel(CarRentalContext context)
-        {
-            _context = context;
-        }
+        public CreateModel(CarRentalContext context) => _context = context;
 
         public List<SelectListItem> CarOptions { get; set; } = new();
 
         [BindProperty]
         public InputModel Input { get; set; } = new();
 
-        public string? ErrorMessage { get; set; }
-
         public class InputModel
         {
             [Required(ErrorMessage = "Wybierz samochód.")]
             public int? CarId { get; set; }
 
-            [Required(ErrorMessage = "Podaj datę od.")]
-            [DataType(DataType.Date)]
+            [Required, DataType(DataType.Date)]
             public DateTime DateFrom { get; set; } = DateTime.Today;
 
-            [Required(ErrorMessage = "Podaj datę do.")]
-            [DataType(DataType.Date)]
+            [Required, DataType(DataType.Date)]
             public DateTime DateTo { get; set; } = DateTime.Today.AddDays(1);
         }
 
         public async Task OnGetAsync(int? carId)
         {
             await LoadCarsAsync();
+            if (carId.HasValue) Input.CarId = carId.Value;
+        }
 
-            // Jeśli przyszliśmy z listy aut (?carId=...), ustawiamy domyślny wybór
-            if (carId.HasValue)
-                Input.CarId = carId.Value;
+        // <-- TO: endpoint dla JS: /Reservations/Create?handler=ReservedRanges&carId=5
+        public async Task<IActionResult> OnGetReservedRangesAsync(int carId)
+        {
+            var ranges = await _context.CarReservations
+                .AsNoTracking()
+                .Where(r => r.CarId == carId && r.Status == ReservationStatus.Aktywna)
+                .Select(r => new
+                {
+                    from = r.DateFrom.Date.ToString("yyyy-MM-dd"),
+                    to = r.DateTo.Date.ToString("yyyy-MM-dd")
+                })
+                .ToListAsync();
+
+            return new JsonResult(ranges);
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -57,32 +63,47 @@ namespace CarRental.Pages.Reservations
             if (!ModelState.IsValid)
                 return Page();
 
-            if (Input.DateTo < Input.DateFrom)
+            if (Input.DateTo.Date < Input.DateFrom.Date)
             {
                 ModelState.AddModelError(nameof(Input.DateTo), "Data do nie może być wcześniejsza niż data od.");
                 return Page();
             }
 
-            // UserId jako Guid z Identity
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userGuid))
+            // Serwerowa walidacja kolizji (MUSI być, nawet jak UI blokuje)
+            var from = Input.DateFrom.Date;
+            var to = Input.DateTo.Date;
+
+            bool overlaps = await _context.CarReservations.AnyAsync(r =>
+                r.CarId == Input.CarId!.Value &&
+                r.Status == ReservationStatus.Aktywna &&
+                r.DateFrom.Date <= to &&
+                r.DateTo.Date >= from);
+
+            if (overlaps)
             {
-                ErrorMessage = "Nie udało się odczytać ID użytkownika jako GUID.";
+                ModelState.AddModelError(string.Empty, "Wybrany termin jest niedostępny dla tego samochodu.");
                 return Page();
             }
 
-            var reservation = new CarReservation
+            // UWAGA: tu zakładam, że NameIdentifier jest GUID-em (tak masz w encji).
+            // Jeśli masz domyślne Identity z string ID, daj znać – zmienimy UserId w encji albo konfigurację Identity.
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(userIdStr) || !Guid.TryParse(userIdStr, out var userGuid))
+            {
+                ModelState.AddModelError(string.Empty, "Nie udało się odczytać ID użytkownika jako GUID.");
+                return Page();
+            }
+
+            _context.CarReservations.Add(new CarReservation
             {
                 UserId = userGuid,
                 CarId = Input.CarId!.Value,
-                DateFrom = Input.DateFrom,
-                DateTo = Input.DateTo,
+                DateFrom = from,
+                DateTo = to,
                 Status = ReservationStatus.Aktywna
-            };
+            });
 
-            _context.CarReservations.Add(reservation);
             await _context.SaveChangesAsync();
-
             return RedirectToPage("/Cars");
         }
 
@@ -90,8 +111,7 @@ namespace CarRental.Pages.Reservations
         {
             CarOptions = await _context.Cars
                 .AsNoTracking()
-                .OrderBy(c => c.Make)
-                .ThenBy(c => c.Model)
+                .OrderBy(c => c.Make).ThenBy(c => c.Model)
                 .Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),

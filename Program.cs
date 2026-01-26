@@ -22,6 +22,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequiredLength = 3;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<CarRentalContext>();
 
 builder.Services.AddRazorPages();
@@ -49,7 +50,6 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<CarRentalContext>();
-        // Create DB file and schema for SQLite
         context.Database.EnsureCreated();
 
         // Seed Cars if empty
@@ -72,7 +72,57 @@ using (var scope = app.Services.CreateScope())
         }
 
         // Seed test user
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        const string adminRole = "Admin";
+        const string userRole = "User";
+
+        // Seed roles
+        if (!await roleManager.RoleExistsAsync(adminRole))
+        {
+            var r = await roleManager.CreateAsync(new IdentityRole(adminRole));
+            if (r.Succeeded) logger.LogInformation("Created role {role}", adminRole);
+            else logger.LogWarning("Failed to create role {role}: {errors}", adminRole,
+                string.Join(", ", r.Errors.Select(e => e.Description)));
+        }
+
+        if (!await roleManager.RoleExistsAsync(userRole))
+        {
+            var r = await roleManager.CreateAsync(new IdentityRole(userRole));
+            if (r.Succeeded) logger.LogInformation("Created role {role}", userRole);
+            else logger.LogWarning("Failed to create role {role}: {errors}", userRole,
+                string.Join(", ", r.Errors.Select(e => e.Description)));
+        }
+
+        // Seed admin user
+        var adminEmail = "admin@local.test";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser == null)
+        {
+            adminUser = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+            var result = await userManager.CreateAsync(adminUser, "Admin123!");
+            if (result.Succeeded)
+            {
+                var debugNewUser = await userManager.FindByEmailAsync(adminEmail);
+                logger.LogInformation("Created admin user {email} with password 'Admin123!'", adminEmail);
+            }
+            else
+            {
+                logger.LogWarning("Failed to create admin user: {errors}",
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+        }
+
+        adminUser = await userManager.FindByEmailAsync(adminEmail);
+        if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, adminRole))
+        {
+            var addRole = await userManager.AddToRoleAsync(adminUser, adminRole);
+            if (addRole.Succeeded) logger.LogInformation("Assigned {email} to role {role}", adminEmail, adminRole);
+            else logger.LogWarning("Failed to assign admin role: {errors}",
+                string.Join(", ", addRole.Errors.Select(e => e.Description)));
+        }
+
+        // Seed test user (normal User)
         var testEmail = "test@local.test";
         var testUser = await userManager.FindByEmailAsync(testEmail);
         if (testUser == null)
@@ -81,31 +131,22 @@ using (var scope = app.Services.CreateScope())
             var result = await userManager.CreateAsync(testUser, "Test123!");
             if (result.Succeeded)
             {
-                var debugNewUser = await userManager.FindByEmailAsync(testEmail);
-                logger.LogInformation("Created test user {email} with password 'Test123!'", testEmail, debugNewUser);
+                logger.LogInformation("Created test user {email} with password 'Test123!'", testEmail);
             }
             else
             {
-                logger.LogWarning("Failed to create test user: {errors}", string.Join(", ", result.Errors.Select(e => e.Description)));
+                logger.LogWarning("Failed to create test user: {errors}",
+                    string.Join(", ", result.Errors.Select(e => e.Description)));
             }
         }
 
-        // Seed test cars
-        if (await context.Cars.AnyAsync() == false)
+        testUser = await userManager.FindByEmailAsync(testEmail);
+        if (testUser != null && !await userManager.IsInRoleAsync(testUser, userRole))
         {
-            var cars = new List<Car>
-         {
-            new Car { Make = "Toyota", Model = "Corolla", Year = 2021, DailyPrice = 149.99m },
-            new Car { Make = "Toyota", Model = "Yaris", Year = 2020, DailyPrice = 129.99m },
-            new Car { Make = "Volkswagen", Model = "Golf", Year = 2019, DailyPrice = 139.99m },
-            new Car { Make = "Skoda", Model = "Octavia", Year = 2022, DailyPrice = 169.99m },
-            new Car { Make = "Kia", Model = "Ceed", Year = 2021, DailyPrice = 149.00m },
-            new Car { Make = "Hyundai", Model = "i30", Year = 2020, DailyPrice = 139.00m },
-            new Car { Make = "BMW", Model = "3 Series", Year = 2021, DailyPrice = 299.99m },
-            new Car { Make = "Audi", Model = "A4", Year = 2022, DailyPrice = 319.99m }
-         };
-            await context.Cars.AddRangeAsync(cars);
-            await context.SaveChangesAsync();
+            var addRole = await userManager.AddToRoleAsync(testUser, userRole);
+            if (addRole.Succeeded) logger.LogInformation("Assigned {email} to role {role}", testEmail, userRole);
+            else logger.LogWarning("Failed to assign user role: {errors}",
+                string.Join(", ", addRole.Errors.Select(e => e.Description)));
         }
     }
     catch (Exception ex)

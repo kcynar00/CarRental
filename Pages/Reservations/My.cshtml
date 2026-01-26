@@ -1,0 +1,44 @@
+@page
+@model CarRental.Pages.Reservations.MyModel
+@{
+    ViewData["Title"] = "Moje rezerwacje";
+}
+
+<h1>Moje rezerwacje</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+else if (Model.Reservations == null || !Model.Reservations.Any())
+{
+    <p>Nie masz jeszcze żadnych rezerwacji.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Samochód</th>
+                <th>Zakres dat</th>
+                <th>Cena / dzień</th>
+                <th>Dni</th>
+                <th>Koszt</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Reservations)
+            {
+                <tr>
+                    <td>@r.CarDisplay</td>
+                    <td>@r.DateFrom:yyyy-MM-dd — @r.DateTo:yyyy-MM-dd</td>
+                    <td>@r.DailyPrice.ToString("0.00")</td>
+                    <td>@r.Days</td>
+                    <td>@r.TotalCost.ToString("0.00")</td>
+                    <td>@r.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

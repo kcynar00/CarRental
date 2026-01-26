@@ -1,0 +1,59 @@
+@page
+@model CarRental.Pages.Admin.ReservationsModel
+@{
+    ViewData["Title"] = "Wszystkie rezerwacje";
+}
+
+<h1>Wszystkie rezerwacje</h1>
+
+@if (Model.Rows == null || !Model.Rows.Any())
+{
+    <p>Brak rezerwacji.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>UserId</th>
+                <th>Samochód</th>
+                <th>Zakres dat</th>
+                <th>Cena / dzień</th>
+                <th>Dni</th>
+                <th>Koszt</th>
+                <th>Status</th>
+                <th>Akcja</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model.Rows)
+            {
+                <tr>
+                    <td>@r.Id</td>
+                    <td>@r.UserId</td>
+                    <td>@r.CarDisplay</td>
+                    <td>@r.DateFrom:yyyy-MM-dd — @r.DateTo:yyyy-MM-dd</td>
+                    <td>@r.DailyPrice.ToString("0.00")</td>
+                    <td>@r.Days</td>
+                    <td>@r.TotalCost.ToString("0.00")</td>
+                    <td>
+                        <form method="post" asp-page-handler="UpdateStatus" class="d-flex gap-2">
+                            <input type="hidden" name="id" value="@r.Id" />
+                            <select class="form-select form-select-sm" name="status">
+                                @foreach (var s in Model.AllStatuses)
+                                {
+                                    <option value="@((int)s)" selected="@(s == r.Status)">
+                                        @s
+                                    </option>
+                                }
+                            </select>
+                            <button class="btn btn-sm btn-success" type="submit">Zapisz</button>
+                        </form>
+                    </td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
