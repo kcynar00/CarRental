@@ -1,4 +1,5 @@
 using System;
+namespace CarRental.Models;
 
 public enum ReservationStatus
 {

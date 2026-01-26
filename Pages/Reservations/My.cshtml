@@ -16,29 +16,74 @@ else if (Model.Reservations == null || !Model.Reservations.Any())
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Samochód</th>
-                <th>Zakres dat</th>
-                <th>Cena / dzień</th>
-                <th>Dni</th>
-                <th>Koszt</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var r in Model.Reservations)
-            {
-                <tr>
-                    <td>@r.CarDisplay</td>
-                    <td>@r.DateFrom:yyyy-MM-dd — @r.DateTo:yyyy-MM-dd</td>
-                    <td>@r.DailyPrice.ToString("0.00")</td>
-                    <td>@r.Days</td>
-                    <td>@r.TotalCost.ToString("0.00")</td>
-                    <td>@r.Status</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card shadow-sm border-0 mt-3">
+        <div class="card-header bg-white d-flex align-items-center justify-content-between">
+            <div>
+                <h5 class="mb-0">Twoje rezerwacje</h5>
+                <small class="text-muted">Lista rezerwacji przypisanych do Twojego konta</small>
+            </div>
+            <span class="badge bg-light text-dark">Razem: @Model.Reservations.Count</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0" style="min-width: 950px;">
+                <thead class="table-light">
+                    <tr>
+                        <th class="px-3">Samochód</th>
+                        <th class="px-3 text-nowrap">Zakres dat</th>
+                        <th class="px-3 text-end text-nowrap">Cena / dzień</th>
+                        <th class="px-3 text-end text-nowrap">Dni</th>
+                        <th class="px-3 text-end text-nowrap">Koszt</th>
+                        <th class="px-3 text-center text-nowrap">Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var r in Model.Reservations)
+                    {
+                        var statusClass = r.Status.ToString() == "Aktywna"
+                        ? "bg-success"
+                        : "bg-secondary";
+
+                        <tr>
+                            <td class="px-3">
+                                <div class="fw-semibold">@r.CarDisplay</div>
+                            </td>
+
+                            <td class="px-3 text-nowrap">
+                                <span class="fw-semibold">@r.DateFrom.ToString("yyyy-MM-dd")</span>
+                                <span class="text-muted mx-2">—</span>
+                                <span class="fw-semibold">@r.DateTo.ToString("yyyy-MM-dd")</span>
+                            </td>
+
+                            <td class="px-3 text-end text-nowrap">
+                                @r.DailyPrice.ToString("0.00") <span class="text-muted">PLN</span>
+                            </td>
+
+                            <td class="px-3 text-end text-nowrap">
+                                @r.Days
+                            </td>
+
+                            <td class="px-3 text-end text-nowrap fw-semibold">
+                                @r.TotalCost.ToString("0.00") <span class="text-muted">PLN</span>
+                            </td>
+
+                            <td class="px-3 text-center text-nowrap">
+                                <span class="badge @statusClass">@r.Status</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <style>
+        /* trochę więcej “oddechu” w komórkach */
+        .table td,
+        .table th {
+            padding-top: .85rem;
+            padding-bottom: .85rem;
+        }
+    </style>
 }
