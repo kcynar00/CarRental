@@ -1,10 +1,52 @@
 ﻿@page
-@model IndexModel
+@model CarRental.Pages.IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Strona główna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+
+    <!-- Hero Section -->
+    <div class="p-5 text-center text-white rounded-4" style="background: linear-gradient(135deg, #4f8ef7 0%, #6fc1ff 100%); box-shadow: 0 5px 25px rgba(0,0,0,0.2);">
+        <h1 class="display-3 fw-bold">Witaj w CarRental!</h1>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <p class="lead mt-3 fs-5">Cześć, <strong>@User.Identity.Name!</strong>! Ciesz się swoim kontem i ofertą samochodów.</p>
+        }
+        else
+        {
+            <p class="lead mt-3 fs-5">Zaloguj się, aby zarządzać swoimi rezerwacjami i wypożyczać samochody.</p>
+        }
+    </div>
+
+    <!-- Karty akcji -->
+    <div class="row g-4 justify-content-center mt-5">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0" style="border-radius: 15px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)';">
+                <div class="card-body text-center">
+                    <i class="bi bi-car-front fs-1 text-primary mb-3"></i>
+                    <h5 class="card-title fw-bold">Oferta samochodów</h5>
+                    <p class="card-text text-muted">Przeglądaj dostępne samochody i wybierz idealny dla siebie.</p>
+                    <a href="/Cars" class="btn btn-primary" style="border-radius: 50px;">Zobacz ofertę</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-0" style="border-radius: 15px; transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 30px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 15px rgba(0,0,0,0.1)';">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check fs-1 text-success mb-3"></i>
+                    <h5 class="card-title fw-bold">Moje rezerwacje</h5>
+                    <p class="card-text text-muted">Sprawdź swoje aktualne i przeszłe rezerwacje.</p>
+                    <a href="/Reservations/My" class="btn btn-success" style="border-radius: 50px;">Moje rezerwacje</a>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
 </div>
