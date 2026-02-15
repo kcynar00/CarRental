@@ -2,45 +2,95 @@
 @model CarRental.Pages.CarsModel
 @{
     ViewData["Title"] = "Lista Samochodów";
+    var isAuth = User?.Identity?.IsAuthenticated == true;
 }
 
-<h1>Nasze Samochody</h1>
+<div class="container py-5">
+    <div class="d-flex align-items-end justify-content-between mb-3">
+        <div>
+            <h1 class="fw-bold mb-1">Nasze samochody</h1>
+            <p class="text-muted mb-0">Wybierz auto i przejdź do rezerwacji.</p>
+        </div>
 
-@if (Model.Cars == null || !Model.Cars.Any())
+        <div class="text-muted small">
+            @(Model.Cars?.Count() ?? 0) pozycji
+        </div>
+    </div>
+
+    @if (Model.Cars == null || !Model.Cars.Any())
+    {
+        <div class="cr-card cr-card--pad">
+            <div class="d-flex align-items-center gap-3">
+                <div class="cr-stat__icon cr-icon--info" aria-hidden="true">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">Brak samochodów w bazie</div>
+                    <div class="text-muted">Spróbuj ponownie później.</div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="cr-tiles cr-tiles--3">
+
+@foreach (var car in Model.Cars)
 {
-    <p>Brak samochodów w bazie.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Marka</th>
-                <th>Model</th>
-                <th>Rok</th>
-                <th>Cena / dzień</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var car in Model.Cars)
-            {
-                <tr>
-                    <td>@car.Id</td>
-                    <td>@car.Make</td>
-                    <td>@car.Model</td>
-                    <td>@car.Year</td>
-                    <td>@car.DailyPrice.ToString("0.00")</td>
-                    <td>
-                        @if (User?.Identity?.IsAuthenticated == true)
-                        {
-                            <a class="btn btn-primary" asp-page="/Reservations/Create" asp-route-carId="@car.Id">
-                                Rezerwuj
-                            </a>
-                        }
-                    </td>
-                </tr>
+    <article class="cr-card cr-card--pad cr-lift cr-car h-100">
+        <header class="cr-car__header">
+            <div class="cr-car__title">
+                <div class="cr-car__make">@car.Make</div>
+                <div class="cr-car__model text-muted">
+                    @car.Model <span class="cr-car__dot" aria-hidden="true">•</span> @car.Year
+                </div>
+            </div>
+
+            <div class="cr-car__cta">
+                <div class="cr-car__price text-muted">
+                    @car.DailyPrice.ToString("0.00") zł / dzień
+                </div>
+
+                @if (isAuth)
+                {
+                    <a class="btn btn-cta btn-sm cr-car__btn"
+                       asp-page="/Reservations/Create"
+                       asp-route-carId="@car.Id">
+                        <i class="fa-solid fa-calendar-check me-2" aria-hidden="true"></i>Rezerwuj
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-secondary btn-sm cr-car__btn"
+                       asp-area="Identity"
+                       asp-page="/Account/Login">
+                        Zaloguj się
+                    </a>
+                }
+            </div>
+        </header>
+
+        <div class="cr-car__divider"></div>
+
+        <dl class="cr-car__spec">
+            <div class="cr-car__spec-row">
+                <dt class="text-muted">Marka</dt>
+                <dd class="mb-0 fw-semibold">@car.Make</dd>
+            </div>
+            <div class="cr-car__spec-row">
+                <dt class="text-muted">Model</dt>
+                <dd class="mb-0 fw-semibold">@car.Model</dd>
+            </div>
+            <div class="cr-car__spec-row">
+                <dt class="text-muted">Rok</dt>
+                <dd class="mb-0 fw-semibold">@car.Year</dd>
+            </div>
+        </dl>
+    </article>
+
+
             }
-        </tbody>
-    </table>
-}
+
+        </div>
+    }
+</div>

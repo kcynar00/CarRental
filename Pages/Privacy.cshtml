@@ -1,8 +1,148 @@
 ﻿@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Polityka prywatności i regulamin";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <header class="mb-4">
+        <h1 class="fw-bold mb-2">@ViewData["Title"]</h1>
+        <p class="text-muted mb-0">
+            Dokument ma charakter informacyjny i obowiązuje od dnia publikacji na stronie.
+        </p>
+    </header>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h2 class="h4 fw-bold mb-3">Polityka prywatności</h2>
+        <p class="mb-2">
+            Szanujemy prywatność użytkowników i przetwarzamy dane osobowe wyłącznie w zakresie niezbędnym do działania serwisu
+            oraz realizacji rezerwacji. Korzystając z serwisu akceptujesz zasady opisane poniżej.
+        </p>
+        <p class="mb-0">
+            W sprawach dotyczących prywatności możesz skontaktować się z administratorem serwisu poprzez dane kontaktowe podane w serwisie.
+        </p>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">1. Zakres zbieranych danych</h3>
+        <p class="mb-2">W zależności od funkcjonalności serwisu możemy przetwarzać:</p>
+        <ul class="mb-0">
+            <li>Dane konta: imię i nazwisko, adres e-mail, numer telefonu, hasło (przechowywane w postaci zaszyfrowanej).</li>
+            <li>Dane rezerwacji: wybrany pojazd, terminy, miejsce odbioru i zwrotu, dodatkowe uwagi.</li>
+            <li>Dane rozliczeniowe: dane do faktury, jeżeli użytkownik o to poprosi.</li>
+            <li>Dane techniczne: adres IP, identyfikatory sesji, logi zdarzeń i informacje o przeglądarce/urządzeniu.</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">2. Cele przetwarzania danych</h3>
+        <ul class="mb-0">
+            <li>Utworzenie i utrzymanie konta użytkownika oraz obsługa logowania.</li>
+            <li>Obsługa rezerwacji i kontakt w sprawie rezerwacji.</li>
+            <li>Utrzymanie bezpieczeństwa serwisu, zapobieganie nadużyciom oraz diagnostyka błędów.</li>
+            <li>Spełnienie obowiązków prawnych, jeżeli powstaną (np. rozliczenia).</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">3. Odbiorcy danych</h3>
+        <p class="mb-2">
+            Dane mogą być przekazywane podmiotom wspierającym działanie serwisu, takim jak dostawca hostingu lub infrastruktury IT,
+            a także podmiotom obsługującym pocztę e-mail, jeżeli jest to konieczne do działania serwisu.
+        </p>
+        <p class="mb-0">
+            Dane są udostępniane wyłącznie w zakresie niezbędnym do realizacji celu.
+        </p>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">4. Okres przechowywania danych</h3>
+        <ul class="mb-0">
+            <li>Dane konta są przechowywane do czasu usunięcia konta przez użytkownika lub zakończenia działania serwisu.</li>
+            <li>Dane rezerwacji są przechowywane przez czas niezbędny do obsługi rezerwacji oraz ewentualnych roszczeń.</li>
+            <li>Logi techniczne są przechowywane przez rozsądny okres w celach bezpieczeństwa i diagnostyki.</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-5">
+        <h3 class="h5 fw-bold mb-3">5. Prawa użytkownika</h3>
+        <p class="mb-2">Użytkownik ma prawo do:</p>
+        <ul class="mb-0">
+            <li>dostępu do swoich danych oraz otrzymania ich kopii,</li>
+            <li>sprostowania danych,</li>
+            <li>usunięcia danych (w przypadkach przewidzianych prawem),</li>
+            <li>ograniczenia przetwarzania,</li>
+            <li>wniesienia sprzeciwu w określonych przypadkach,</li>
+            <li>złożenia skargi do organu nadzorczego.</li>
+        </ul>
+    </section>
+
+    <hr class="my-5" />
+
+    <header class="mb-4">
+        <h2 class="fw-bold mb-2">Regulamin serwisu</h2>
+        <p class="text-muted mb-0">Zasady korzystania z serwisu oraz składania rezerwacji.</p>
+    </header>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">1. Postanowienia ogólne</h3>
+        <ul class="mb-0">
+            <li>Serwis służy do przeglądania oferty pojazdów oraz składania rezerwacji.</li>
+            <li>Użytkownik zobowiązuje się do korzystania z serwisu zgodnie z prawem oraz dobrymi obyczajami.</li>
+            <li>Administrator może czasowo ograniczyć dostęp do serwisu w związku z pracami technicznymi lub bezpieczeństwem.</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">2. Konto użytkownika</h3>
+        <ul class="mb-0">
+            <li>Niektóre funkcje serwisu mogą wymagać rejestracji i zalogowania.</li>
+            <li>Użytkownik odpowiada za poufność danych logowania oraz za działania wykonane w ramach swojego konta.</li>
+            <li>Administrator może zablokować konto w przypadku naruszenia regulaminu lub działań zagrażających serwisowi.</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">3. Rezerwacje</h3>
+        <ul class="mb-0">
+            <li>Rezerwacja polega na wyborze pojazdu oraz terminu i przesłaniu zgłoszenia przez serwis.</li>
+            <li>Potwierdzenie rezerwacji może być przekazane w panelu użytkownika lub w wiadomości e-mail.</li>
+            <li>W wyjątkowych przypadkach rezerwacja może zostać odrzucona, np. z powodu braku dostępności pojazdu.</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">4. Odbiór i zwrot pojazdu</h3>
+        <ul class="mb-0">
+            <li>Szczegóły odbioru i zwrotu są ustalane zgodnie z informacjami w rezerwacji.</li>
+            <li>Stan pojazdu może być potwierdzany protokołem odbioru/zwrotu.</li>
+            <li>Użytkownik zobowiązuje się do dbania o pojazd zgodnie z zasadami określonymi przy rezerwacji lub w umowie najmu.</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">5. Odpowiedzialność</h3>
+        <ul class="mb-0">
+            <li>Administrator dokłada starań, aby serwis działał prawidłowo, lecz nie gwarantuje braku przerw lub błędów.</li>
+            <li>Administrator nie ponosi odpowiedzialności za szkody wynikłe z nieprawidłowego korzystania z serwisu.</li>
+            <li>Administrator może wprowadzać zmiany w serwisie i funkcjonalnościach w celu rozwoju projektu.</li>
+        </ul>
+    </section>
+
+    <section class="cr-card cr-card--pad mb-4">
+        <h3 class="h5 fw-bold mb-3">6. Reklamacje</h3>
+        <p class="mb-2">
+            Zgłoszenia dotyczące problemów z działaniem serwisu można przesyłać drogą kontaktową wskazaną w serwisie.
+        </p>
+        <p class="mb-0">
+            Zgłoszenia będą rozpatrywane w rozsądnym terminie, zależnie od złożoności problemu.
+        </p>
+    </section>
+
+    <section class="cr-card cr-card--pad">
+        <h3 class="h5 fw-bold mb-3">7. Informacja o projekcie</h3>
+        <p class="mb-0">
+            Serwis stanowi projekt realizowany w ramach zajęć jako projekt zespołowy.
+        </p>
+    </section>
+</div>

@@ -516,3 +516,102 @@ header, main, footer{
     transform: none;
   }
 }
+.cr-table thead th{
+  font-weight: 800;
+  color: #0f172a;
+  border-bottom: 1px solid rgba(15, 23, 42, .08) !important;
+}
+
+.cr-table tbody td{
+  border-top: 1px solid rgba(15, 23, 42, .06);
+}
+
+.cr-table tbody tr:hover{
+  background: rgba(27, 110, 194, .04);
+}
+.cr-car{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cr-car__header{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cr-car__make{
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  font-size: 1.05rem;
+}
+
+.cr-car__model{
+  font-size: .95rem;
+}
+
+.cr-car__meta{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.cr-car__divider{
+  height: 1px;
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.cr-car__spec{
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.cr-car__spec-row{
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cr-car__spec dt{
+  margin: 0;
+}
+
+.cr-car__spec dd{
+  margin: 0;
+  text-align: right;
+}
+
+.cr-car__footer{
+  margin-top: auto; /* przykleja przycisk do dołu kafelka */
+}
+/* Cars tiles: header z CTA po prawej */
+.cr-car__header{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between; /* lewa: tytuł, prawa: cena + button [web:186] */
+  gap: 16px;
+}
+
+.cr-car__cta{
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.cr-car__price{
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.cr-car__btn{
+  white-space: nowrap;
+}
+
+.cr-car__dot{
+  opacity: .6;
+  margin: 0 6px;
+}
